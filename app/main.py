@@ -22,7 +22,15 @@ if uploaded_file:
         raw_data = load_data(temp_path)
 
         st.success(f"✅ {len(raw_data)} satır yüklendi.")
-        st.dataframe(raw_data[:100] if isinstance(raw_data, list) else pd.DataFrame(raw_data).head(100))
+
+        if isinstance(raw_data, list):
+            df = pd.DataFrame({"text": raw_data})
+        elif isinstance(raw_data, pd.DataFrame):
+            df = raw_data
+        else:
+            df = pd.DataFrame(raw_data)
+
+        st.dataframe(df.head(100))
 
         st.markdown("### 🔄 Bir sonraki adım: Veri temizleme")
         st.button("🚀 Temizlemeye Başla (yakında aktif)")
@@ -32,4 +40,3 @@ if uploaded_file:
 
 else:
     st.info("Lütfen bir .txt, .csv veya .jsonl dosyası yükleyin.")
-
